@@ -17,13 +17,11 @@ def visualize_ngrams(ngrams: dict[str, int], limit: int = LIMIT) -> None:
         plt.xticks(rotation=45)
         plt.show()
 
-def find_and_visualize(df: pd.DataFrame, start_date: pd.Timestamp, input_column: str, date_column: str,
-                       lemmatizer: nltk.stem.WordNetLemmatizer, permitted_PoS: list[str], max_length: int,
-                       n: int, vectorizer: sklearn.feature_extraction.text.TfidfVectorizer) -> dict[str, int]:
+def find_and_visualize(input_column: list[str], lemmatizer: nltk.stem.WordNetLemmatizer, 
+                       permitted_PoS: list[str], max_length: int, n: int,
+                       vectorizer: sklearn.feature_extraction.text.TfidfVectorizer) -> list[str]:
     '''Perform the entire process of processing and visualization.'''
-    df[date_column] = pd.to_datetime(df[date_column])
-    df = preprocessing.fully_clean(df, start_date, input_column, lemmatizer, permitted_PoS, max_length) #clean text and limit to dates after given starting date
-    ngrams = preprocessing.find_counter(df[input_column].tolist(), vectorizer, n) #get the counter
+    ngrams = preprocessing.find_counter(input_column, vectorizer, n) #get the counter
     visualize_ngrams(ngrams)
     sorted_ngrams = sorted(zip(ngrams.values(), ngrams.keys()), reverse=True)[:LIMIT*TIMES]
-    return [item[1] for item in sorted_ngrams], df
+    return [item[1] for item in sorted_ngrams]

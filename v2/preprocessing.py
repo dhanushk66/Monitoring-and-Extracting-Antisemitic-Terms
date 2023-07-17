@@ -30,8 +30,8 @@ def clean_text(text: str, keep_punctuation: bool = False) -> str:
         text = text.replace(str(number), '')
     if not keep_punctuation:
         for punct in string.punctuation:
-            text.replace(punct, '')
-    return text
+            text = text.replace(punct, '')
+    return text.lower()
 
 def preprocess_text(text: str, lemmatizer: nltk.stem.WordNetLemmatizer, permitted_PoS: list[str], max_length: int) -> str:
     '''Preprocess a text, tokenizing and lematizing it, preparing for extraction.'''
@@ -41,7 +41,6 @@ def preprocess_text(text: str, lemmatizer: nltk.stem.WordNetLemmatizer, permitte
 
 def keep_words(text: str, words_to_keep: frozenset[str]) -> str:
     '''Keep only the words in the text given by `words_to_keep`'''
-    print(text)
     return ' '.join(word for word in text.split() if is_in_wordlist(word, words_to_keep))
 
 #dataframe wrangling
